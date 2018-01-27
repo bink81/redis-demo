@@ -65,7 +65,7 @@ public class ApplicationTest {
 
 	@Test
 	public void givenAlreadyCreatedMessage_whenQueryForAll_thenOneIsFound() throws Exception {
-		mockMvc.perform(get(MESSAGES_PATH).contentType(contentType)).andExpect(jsonPath("$", hasSize(1)));
+		verifyThatNumberOfPersistedMessagesEquals(1);
 	}
 
 	@Test
@@ -82,5 +82,16 @@ public class ApplicationTest {
 	@Test
 	public void givenAlreadyCreatedMessage_whenRequestingPostWithoutBody_thenFail() throws Exception {
 		mockMvc.perform(post(MESSAGES_PATH).contentType(contentType)).andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void givenAlreadyCreatedMessage_whenRequestingPost_thenWeGetAnotherRecord() throws Exception {
+		mockMvc.perform(post(MESSAGES_PATH).content(DUMMY_CONTENT).contentType(contentType)).andExpect(status().isOk());
+		verifyThatNumberOfPersistedMessagesEquals(2);
+	}
+
+	private void verifyThatNumberOfPersistedMessagesEquals(int i) throws Exception {
+		mockMvc.perform(get(MESSAGES_PATH).contentType(contentType)).andExpect(status().isOk())
+				.andExpect(jsonPath("$", hasSize(i)));
 	}
 }
