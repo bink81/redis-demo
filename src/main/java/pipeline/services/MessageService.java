@@ -1,6 +1,8 @@
 package pipeline.services;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,8 @@ public class MessageService {
 	}
 
 	public Collection<Message> findMessages() {
-		return messageRepository.findAll();
+		return StreamSupport.stream(messageRepository.findAll().spliterator(), false)
+				.collect(Collectors.toList());
 	}
 
 	public Message saveMessage(Message message) {

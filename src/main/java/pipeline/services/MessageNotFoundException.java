@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 class MessageNotFoundException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
 
-	public MessageNotFoundException(Long childId) {
-		super("could not find child '" + childId + "'.");
+	public MessageNotFoundException(Long id) {
+		super("could not find message with id'" + id + "'.");
 	}
 }
