@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -27,7 +26,6 @@ import pipeline.model.Message;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
-@TestPropertySource(locations = "test.properties")
 public class ApplicationTest {
 
 	private static final String DUMMY_CONTENT = "dummy_content";
@@ -60,8 +58,8 @@ public class ApplicationTest {
 
 	@Test
 	public void givenAlreadyCreatedMessage_whenQueryForItsId_thenItIsFound() throws Exception {
-		mockMvc.perform(get(MESSAGES_PATH + message.getId()).contentType(contentType))
-				.andExpect(status().isOk()).andExpect(content().contentType(contentType));
+		mockMvc.perform(get(MESSAGES_PATH + message.getId()).contentType(contentType)).andExpect(status().isOk())
+				.andExpect(content().contentType(contentType));
 	}
 
 	@Test
@@ -86,7 +84,8 @@ public class ApplicationTest {
 	//
 	// @Test
 	// public void
-	// givenAlreadyCreatedMessage_whenRequestingPostWithoutBody_thenFail() throws
+	// givenAlreadyCreatedMessage_whenRequestingPostWithoutBody_thenFail()
+	// throws
 	// Exception {
 	// mockMvc.perform(post(MESSAGES_PATH).contentType(contentType))
 	// .andExpect(status().isBadRequest());
