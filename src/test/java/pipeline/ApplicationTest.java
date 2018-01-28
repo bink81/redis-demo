@@ -30,7 +30,7 @@ public class ApplicationTest {
 
 	private static final String DUMMY_CONTENT = "dummy_content";
 
-	private static final String MESSAGES_PATH = "/messages/";
+	private static final String MESSAGES_PATH = "/v1/messages/";
 
 	private static final String MISSING_MESSAGE_ID = "1111";
 

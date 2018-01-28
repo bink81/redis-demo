@@ -1,5 +1,5 @@
 # redis-demo
-This is a simple demo of a REST API that uses redis
+This is a simple demo of a REST API that send and receives messages to Redis, persists them in a dB and notifies WebSockets
 
 ## Installation
 
@@ -19,7 +19,11 @@ mvn package
 
 When started, the system has a REST API that supports GET and POST requests:
 
-http://localhost:8080/messages/
+http://localhost:8080/v1/messages/
+
+In addition a URL tracks all incoming messages. Note that a connection is closed when a server restarts. 
+
+http://localhost:8080/index.html
 
 ## License
 

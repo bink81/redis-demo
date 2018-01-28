@@ -12,7 +12,7 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
 import pipeline.model.Message;
-import pipeline.redis.Receiver;
+import pipeline.redis.MessageReceiver;
 import pipeline.services.MessageService;
 
 @EnableAutoConfiguration
@@ -33,13 +33,8 @@ public class Application {
 	}
 
 	@Bean
-	MessageListenerAdapter listenerAdapter(Receiver receiver) {
-		return new MessageListenerAdapter(receiver, "receiveMessage");
-	}
-
-	@Bean
-	Receiver receiver() {
-		return new Receiver();
+	MessageListenerAdapter listenerAdapter(MessageReceiver messageReceiver) {
+		return new MessageListenerAdapter(messageReceiver, "receiveMessage");
 	}
 
 	@Bean

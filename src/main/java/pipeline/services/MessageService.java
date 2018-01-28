@@ -26,11 +26,11 @@ public class MessageService {
 	}
 
 	public Collection<Message> findMessages() {
-		return StreamSupport.stream(messageRepository.findAll().spliterator(), false)
-				.collect(Collectors.toList());
+		return StreamSupport.stream(messageRepository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
 	public Message saveMessage(Message message) {
-		return messageRepository.save(message);
+		Message saved = messageRepository.save(message);
+		return saved;
 	}
 }

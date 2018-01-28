@@ -19,7 +19,7 @@ import pipeline.model.Message;
 import pipeline.services.MessageService;
 
 @RestController
-@RequestMapping("/messages")
+@RequestMapping("/v1/messages")
 public class MessageController {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MessageController.class);
 
