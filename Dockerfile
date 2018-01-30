@@ -1,9 +1,10 @@
-FROM java:8
+FROM maven:3.5.2-jdk-8
+MAINTAINER bink81
 
-COPY ./target /var/www/java
-WORKDIR /var/www/java
+ADD . /usr/local/message_server
 
-RUN java -jar redis-demo-0.0.1-SNAPSHOT.jar
-CMD ["java", "Application"]
+RUN cd /usr/local/message_server && mvn -DskipTests clean package && ls /usr/local/message_server/target
+
+CMD ["java", "-jar", "/usr/local/message_server/target/redis-demo-0.0.1-SNAPSHOT.jar"]
 
 EXPOSE 8080

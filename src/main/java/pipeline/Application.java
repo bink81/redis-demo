@@ -1,34 +1,35 @@
 package pipeline;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 
-import pipeline.model.Message;
 import pipeline.redis.MessageReceiver;
 import pipeline.services.MessageService;
 
 @EnableAutoConfiguration
 @SpringBootApplication
 public class Application {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
 
 	public static final String TOPIC = "messages";
 
 	@Bean
-	RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,
-			MessageListenerAdapter listenerAdapter) {
-
+	RedisMessageListenerContainer container(MessageListenerAdapter listenerAdapter) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+		RedisConnectionFactory connectionFactory = jedisConnectionFactory();
 		container.setConnectionFactory(connectionFactory);
 		container.addMessageListener(listenerAdapter, new PatternTopic(TOPIC));
-
 		return container;
 	}
 
@@ -39,7 +40,30 @@ public class Application {
 
 	@Bean
 	StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+		if (null == connectionFactory) {
+			LOGGER.error("Redis Template Service not available");
+			return null;
+		}
 		return new StringRedisTemplate(connectionFactory);
+	}
+
+	@Bean
+	JedisConnectionFactory jedisConnectionFactory() {
+		JedisConnectionFactory factory = new JedisConnectionFactory();
+		String redisConnectionUrl = System.getenv("REDIS_PORT");
+		LOGGER.info("redisConnectionUrl: {}", redisConnectionUrl);
+		if (redisConnectionUrl != null) {
+			String hostURL = redisConnectionUrl.substring("tcp://".length());
+			int portSeparatorPosition = hostURL.indexOf(':');
+			String hostName = hostURL.substring(0, portSeparatorPosition);
+			LOGGER.info("hostName: {}", hostName);
+			factory.setHostName(hostName);
+			int port = Integer.parseInt(hostURL.substring(portSeparatorPosition + 1));
+			factory.setPort(port);
+			LOGGER.info("port: {}", port);
+		}
+		factory.setUsePool(true);
+		return factory;
 	}
 
 	public static void main(String[] args) throws Exception {
@@ -48,8 +72,6 @@ public class Application {
 
 	@Bean
 	CommandLineRunner init(MessageService messageService) {
-		// demo data
-		messageService.saveMessage(new Message("dummy payload"));
 		return null;
 	}
 }
