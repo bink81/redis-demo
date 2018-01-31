@@ -8,7 +8,12 @@ This is a simple demo of a REST API that send and receives messages to Redis, pe
 mvn spring-boot:run
 ```
 
-### To deploy start a local server together with Redis using Docker :
+### To build the jar:
+```
+mvn -DskipTests clean package
+```
+
+### To deploy the jar to a local server together with Redis using Docker :
 
 ```
 docker-compose up

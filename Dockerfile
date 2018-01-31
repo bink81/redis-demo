@@ -1,10 +1,9 @@
-FROM maven:3.5.2-jdk-8
-MAINTAINER bink81
+FROM openjdk:8-jdk-alpine
 
-ADD . /usr/local/message_server
+ARG JAR_FILE
 
-RUN cd /usr/local/message_server && mvn -DskipTests clean package && ls /usr/local/message_server/target
+ADD ${JAR_FILE} app.jar
 
-CMD ["java", "-jar", "/usr/local/message_server/target/redis-demo-0.0.1-SNAPSHOT.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom","-jar","/app.jar"]
 
 EXPOSE 8080
