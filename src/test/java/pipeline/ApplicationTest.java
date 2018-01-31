@@ -2,6 +2,7 @@ package pipeline;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -23,6 +24,9 @@ import org.springframework.web.context.WebApplicationContext;
 import pipeline.dao.MessageRepository;
 import pipeline.model.Message;
 
+/*
+ * This test suite requires an externally running Redis and database services
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = Application.class)
 @WebAppConfiguration
@@ -73,32 +77,21 @@ public class ApplicationTest {
 				.andExpect(status().isNotFound());
 	}
 
-	// Disabled until I figure out how to unit test Redis
+	@Test
+	public void givenAlreadyCreatedMessage_whenRequestingPost_thenSuccess() throws Exception {
+		mockMvc.perform(post(MESSAGES_PATH).content(DUMMY_CONTENT).contentType(contentType)).andExpect(status().isOk());
+	}
 
-	// @Test
-	// public void givenAlreadyCreatedMessage_whenRequestingPost_thenSuccess()
-	// throws Exception {
-	// mockMvc.perform(post(MESSAGES_PATH).content(DUMMY_CONTENT).contentType(contentType))
-	// .andExpect(status().isOk());
-	// }
-	//
-	// @Test
-	// public void
-	// givenAlreadyCreatedMessage_whenRequestingPostWithoutBody_thenFail()
-	// throws
-	// Exception {
-	// mockMvc.perform(post(MESSAGES_PATH).contentType(contentType))
-	// .andExpect(status().isBadRequest());
-	// }
-	//
-	// @Test
-	// public void
-	// givenAlreadyCreatedMessage_whenRequestingPost_thenWeGetAnotherRecord()
-	// throws Exception {
-	// mockMvc.perform(post(MESSAGES_PATH).content(DUMMY_CONTENT).contentType(contentType))
-	// .andExpect(status().isOk());
-	// verifyThatNumberOfPersistedMessagesEquals(2);
-	// }
+	@Test
+	public void givenAlreadyCreatedMessage_whenRequestingPostWithoutBody_thenFail() throws Exception {
+		mockMvc.perform(post(MESSAGES_PATH).contentType(contentType)).andExpect(status().isBadRequest());
+	}
+
+	@Test
+	public void givenAlreadyCreatedMessage_whenRequestingPost_thenWeGetAnotherRecord() throws Exception {
+		mockMvc.perform(post(MESSAGES_PATH).content(DUMMY_CONTENT).contentType(contentType)).andExpect(status().isOk());
+		verifyThatNumberOfPersistedMessagesEquals(2);
+	}
 
 	private void verifyThatNumberOfPersistedMessagesEquals(int i) throws Exception {
 		mockMvc.perform(get(MESSAGES_PATH).contentType(contentType)).andExpect(status().isOk())

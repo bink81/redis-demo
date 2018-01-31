@@ -1,11 +1,25 @@
 web:
   environment:
-    - JAR_FILE=/target/redis-demo-0.0.1-SNAPSHOT.jar
+    - JAR_FILE=/redis-demo-0.0.1-SNAPSHOT.jar
+    - DATABASE_HOST=db
+    - DATABASE_USER=dbuser
+    - DATABASE_PASSWORD=dbp4ss
+    - DATABASE_NAME=demo  
+    - DATABASE_PORT=3306
   build: .
   ports:
    - "8080:8080"
   links:
    - redis
+   - db
 redis:
   image: redis
-  
+db:
+  image: mysql  
+  environment:
+    - MYSQL_ROOT_PASSWORD=p4SSW0rd
+    - MYSQL_DATABASE=demo
+    - MYSQL_USER=dbuser
+    - MYSQL_PASSWORD=dbp4ss
+  volumes:
+    - /opt/mysql_data:/var/lib/mysql
