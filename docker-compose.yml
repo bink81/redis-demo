@@ -6,7 +6,7 @@ web:
     - DATABASE_PASSWORD=dbp4ss
     - DATABASE_NAME=demo  
     - DATABASE_PORT=3306
-  build: ./target
+  build: ./deployment
   ports:
    - "8080:8080"
   links:

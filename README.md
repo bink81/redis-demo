@@ -14,7 +14,7 @@ mvn -DskipTests clean package
 docker-compose up
 ```
 
-### To deploy the testing system:
+### To deploy the integration testing setup:
 
 ```
 docker-compose -f .\docker-compose-test.yml up
