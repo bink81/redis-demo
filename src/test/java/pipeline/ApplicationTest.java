@@ -90,6 +90,10 @@ public class ApplicationTest {
 	@Test
 	public void givenAlreadyCreatedMessage_whenRequestingPost_thenWeGetAnotherRecord() throws Exception {
 		mockMvc.perform(post(MESSAGES_PATH).content(DUMMY_CONTENT).contentType(contentType)).andExpect(status().isOk());
+		// We need to wait a bit until this asynchronuous operation (via Redis listener)
+		// finishes
+		Thread.sleep(100);
+
 		verifyThatNumberOfPersistedMessagesEquals(2);
 	}
 

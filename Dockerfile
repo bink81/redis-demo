@@ -1,11 +1,17 @@
-FROM openjdk:8-jdk-alpine
+# This configuration creates an integration test image
+# It's probably a hack to put it here (while the production configuration is in "target" directory), 
+# but I need the pom file in the Docker context.
+
+FROM maven:3.5.2-jdk-8
+
+MAINTAINER bink81
 
 VOLUME /tmp
 
-ADD target/redis-demo-0.0.1-SNAPSHOT.jar application/app.jar
+ADD . ./application
 
-RUN touch application/app.jar
+WORKDIR /application
 
-ENTRYPOINT ["java","-jar","-Djava.security.egd=file:/dev/./urandom","application/app.jar"]
+ENTRYPOINT mvn clean verify
 
 EXPOSE 8080

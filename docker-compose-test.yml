@@ -1,12 +1,11 @@
-web:
+test:
   environment:
-    - JAR_FILE=/redis-demo-0.0.1-SNAPSHOT.jar
     - DATABASE_HOST=db
     - DATABASE_USER=dbuser
     - DATABASE_PASSWORD=dbp4ss
     - DATABASE_NAME=demo  
     - DATABASE_PORT=3306
-  build: ./target
+  build: .  
   ports:
    - "8080:8080"
   links:

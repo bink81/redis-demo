@@ -3,20 +3,21 @@ This is a simple demo of a REST API that send and receives messages to Redis, pe
 
 ## Installation
 
-### To start a local server alone (without Redis):
+### To start a local web server alone (not useful without Redis and dB though):
 ```
 mvn spring-boot:run
 ```
 
-### To build the jar:
+### To build the jar and deploy the 'production' system:
 ```
 mvn -DskipTests clean package
-```
-
-### To deploy the jar to a local server together with Redis using Docker :
-
-```
 docker-compose up
+```
+
+### To deploy the testing system:
+
+```
+docker-compose -f .\docker-compose-test.yml up
 ```
 
 ## Operations
