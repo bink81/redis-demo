@@ -1,10 +1,10 @@
 package pipeline.websocket;
 
-public class NotificationMessage {
+public class OutgoingMessage {
 
 	private String text;
 
-	public NotificationMessage(String text) {
+	public OutgoingMessage(String text) {
 		this.setText(text);
 	}
 

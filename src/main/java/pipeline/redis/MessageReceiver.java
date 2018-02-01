@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 
 import pipeline.model.Message;
 import pipeline.services.MessageService;
-import pipeline.websocket.NotificationMessage;
+import pipeline.websocket.OutgoingMessage;
 import pipeline.websocket.WebSocketConfig;
 
 @Controller
@@ -27,7 +27,9 @@ public class MessageReceiver {
 	public void receiveMessage(String message) {
 		LOGGER.info("Received <" + message + ">");
 		Message user = new Message(message);
+
+		// Send notification(s) only when persistence works
 		messageService.saveMessage(user);
-		this.template.convertAndSend(WebSocketConfig.DESTINATION, new NotificationMessage(message));
+		template.convertAndSend(WebSocketConfig.DESTINATION, new OutgoingMessage(message));
 	}
 }

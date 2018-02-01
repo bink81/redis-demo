@@ -25,21 +25,21 @@ public class Application {
 	public static final String TOPIC = "messages";
 
 	@Bean
-	RedisMessageListenerContainer container(MessageListenerAdapter listenerAdapter) {
+	RedisMessageListenerContainer setupRedisContainer(MessageListenerAdapter listenerAdapter) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-		RedisConnectionFactory connectionFactory = jedisConnectionFactory();
+		RedisConnectionFactory connectionFactory = setupRedisConnectionFactory();
 		container.setConnectionFactory(connectionFactory);
 		container.addMessageListener(listenerAdapter, new PatternTopic(TOPIC));
 		return container;
 	}
 
 	@Bean
-	MessageListenerAdapter listenerAdapter(MessageReceiver messageReceiver) {
+	MessageListenerAdapter setupRedisListenerAdapter(MessageReceiver messageReceiver) {
 		return new MessageListenerAdapter(messageReceiver, "receiveMessage");
 	}
 
 	@Bean
-	StringRedisTemplate template(RedisConnectionFactory connectionFactory) {
+	StringRedisTemplate setupRedisTemplate(RedisConnectionFactory connectionFactory) {
 		if (null == connectionFactory) {
 			LOGGER.error("Redis Template Service not available");
 			return null;
@@ -48,22 +48,28 @@ public class Application {
 	}
 
 	@Bean
-	JedisConnectionFactory jedisConnectionFactory() {
+	JedisConnectionFactory setupRedisConnectionFactory() {
 		JedisConnectionFactory factory = new JedisConnectionFactory();
 		String redisConnectionUrl = System.getenv("REDIS_PORT");
 		LOGGER.info("redisConnectionUrl: {}", redisConnectionUrl);
 		if (redisConnectionUrl != null) {
-			String hostURL = redisConnectionUrl.substring("tcp://".length());
-			int portSeparatorPosition = hostURL.indexOf(':');
-			String hostName = hostURL.substring(0, portSeparatorPosition);
-			LOGGER.info("hostName: {}", hostName);
-			factory.setHostName(hostName);
-			int port = Integer.parseInt(hostURL.substring(portSeparatorPosition + 1));
-			factory.setPort(port);
-			LOGGER.info("port: {}", port);
+			extractAndAssignRedicConnection(factory, redisConnectionUrl);
 		}
 		factory.setUsePool(true);
 		return factory;
+	}
+
+	private void extractAndAssignRedicConnection(JedisConnectionFactory factory, String redisConnectionUrl) {
+		String hostURL = redisConnectionUrl.substring("tcp://".length());
+		int portSeparatorPosition = hostURL.indexOf(':');
+
+		String hostName = hostURL.substring(0, portSeparatorPosition);
+		LOGGER.info("hostName: {}", hostName);
+		factory.setHostName(hostName);
+
+		int port = Integer.parseInt(hostURL.substring(portSeparatorPosition + 1));
+		factory.setPort(port);
+		LOGGER.info("port: {}", port);
 	}
 
 	public static void main(String[] args) throws Exception {
