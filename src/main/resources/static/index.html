@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-	    <title>Hello WebSocket</title>
+	    <title>Persisted messages</title>
 	    <script src="/webjars/jquery/jquery.min.js"></script>
 	    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
 	    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
@@ -9,10 +9,10 @@
 	</head>
 	<body>
 		<noscript>Enable Javascript and reload this page!</noscript>	
-	    <table id="messageTable">
+	    <table border="1" id="messageTable">
 	        <thead>
 	        <tr>
-	            <th>New messages</th>
+	            <th>Messages</th>
 	        </tr>
 	        </thead>
 	        	<tbody id="messages">

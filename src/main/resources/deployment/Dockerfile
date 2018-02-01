@@ -1,6 +1,5 @@
-# This configuration creates a production (demo) web server image
-# It's probably a hack to put it in "target" directory, but I need the parent directory
-# to contain a Dockerfile configuration image with integration tests.
+# This configuration creates a production (demo) web server image.
+# It's possibly a hack to put it in "deployment" directory, but I need the parent directory to contain a Dockerfile configuration image with integration tests.
 
 FROM openjdk:8-jdk-alpine
 

@@ -6,7 +6,7 @@ web:
     - DATABASE_PASSWORD=dbp4ss
     - DATABASE_NAME=demo  
     - DATABASE_PORT=3306
-  build: ./deployment
+  build: ./target
   ports:
    - "8080:8080"
   links:
@@ -14,6 +14,9 @@ web:
    - db
 redis:
   image: redis
+  command: redis-server /usr/local/etc/redis/redis.conf
+  volumes:
+    - /src/main/resources/deployment/redis.conf:/usr/local/etc/redis/redis.conf 
 db:
   image: mysql  
   environment:

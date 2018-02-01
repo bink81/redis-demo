@@ -4,20 +4,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import pipeline.redis.MessageReceiver;
 import pipeline.services.MessageService;
 
-@EnableAutoConfiguration
 @SpringBootApplication
 public class Application {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Application.class);
@@ -25,30 +23,29 @@ public class Application {
 	public static final String TOPIC = "messages";
 
 	@Bean
-	RedisMessageListenerContainer setupRedisContainer(MessageListenerAdapter listenerAdapter) {
+	RedisMessageListenerContainer container(MessageListenerAdapter listenerAdapter) {
 		RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-		RedisConnectionFactory connectionFactory = setupRedisConnectionFactory();
+		JedisConnectionFactory connectionFactory = connectionFactory();
 		container.setConnectionFactory(connectionFactory);
 		container.addMessageListener(listenerAdapter, new PatternTopic(TOPIC));
 		return container;
 	}
 
 	@Bean
-	MessageListenerAdapter setupRedisListenerAdapter(MessageReceiver messageReceiver) {
+	MessageListenerAdapter listenerAdapter(MessageReceiver messageReceiver) {
 		return new MessageListenerAdapter(messageReceiver, "receiveMessage");
 	}
 
 	@Bean
-	StringRedisTemplate setupRedisTemplate(RedisConnectionFactory connectionFactory) {
-		if (null == connectionFactory) {
-			LOGGER.error("Redis Template Service not available");
-			return null;
-		}
-		return new StringRedisTemplate(connectionFactory);
+	RedisTemplate<String, Object> redisTemplate(JedisConnectionFactory connectionFactory) {
+		RedisTemplate<String, Object> redisTemplate = new RedisTemplate<String, Object>();
+		redisTemplate.setConnectionFactory(connectionFactory());
+		redisTemplate.setKeySerializer(new StringRedisSerializer());
+		return redisTemplate;
 	}
 
 	@Bean
-	JedisConnectionFactory setupRedisConnectionFactory() {
+	JedisConnectionFactory connectionFactory() {
 		JedisConnectionFactory factory = new JedisConnectionFactory();
 		String redisConnectionUrl = System.getenv("REDIS_PORT");
 		LOGGER.info("redisConnectionUrl: {}", redisConnectionUrl);
