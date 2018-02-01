@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import pipeline.model.Message;
+import pipeline.model.IncomingMessage;
 import pipeline.services.MessageService;
 import pipeline.websocket.OutgoingMessage;
 import pipeline.websocket.WebSocketConfig;
@@ -26,7 +26,7 @@ public class MessageReceiver {
 
 	public void receiveMessage(String message) {
 		LOGGER.info("Received <" + message + ">");
-		Message user = new Message(message);
+		IncomingMessage user = new IncomingMessage(message);
 
 		// Send notification(s) only when persistence works
 		messageService.saveMessage(user);

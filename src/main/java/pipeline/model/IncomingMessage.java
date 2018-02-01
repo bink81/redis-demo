@@ -6,7 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Message {
+public class IncomingMessage {
 
 	@Id
 	@GeneratedValue
@@ -15,12 +15,12 @@ public class Message {
 	@Column(nullable = false)
 	private String text;
 
-	public Message(String text) {
+	public IncomingMessage(String text) {
 		this.text = text;
 	}
 
 	// for JPA
-	protected Message() {
+	protected IncomingMessage() {
 	}
 
 	public Long getId() {

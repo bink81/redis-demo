@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import pipeline.Application;
-import pipeline.model.Message;
+import pipeline.model.IncomingMessage;
 import pipeline.services.MessageService;
 
 @RestController
@@ -30,7 +30,7 @@ public class MessageController {
 	private ApplicationContext applicationContext;
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
-	Message findMessage(@PathVariable Long id) {
+	IncomingMessage findMessage(@PathVariable Long id) {
 		return messageService.findMessage(id);
 	}
 
@@ -47,7 +47,7 @@ public class MessageController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	Collection<Message> findMessages() {
+	Collection<IncomingMessage> findMessages() {
 		return messageService.findMessages();
 	}
 }

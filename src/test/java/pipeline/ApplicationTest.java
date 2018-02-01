@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
 import pipeline.dao.MessageRepository;
-import pipeline.model.Message;
+import pipeline.model.IncomingMessage;
 
 /*
  * This test suite requires an externally running Redis and database services
@@ -43,7 +43,7 @@ public class ApplicationTest {
 
 	private MockMvc mockMvc;
 
-	private Message message;
+	private IncomingMessage message;
 
 	@Autowired
 	private WebApplicationContext webApplicationContext;
@@ -57,7 +57,7 @@ public class ApplicationTest {
 		messageRepository.deleteAll();
 
 		// persist the message to test GET methods
-		message = messageRepository.save(new Message("dummy text"));
+		message = messageRepository.save(new IncomingMessage("dummy text"));
 	}
 
 	@Test

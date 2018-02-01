@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pipeline.dao.MessageRepository;
-import pipeline.model.Message;
+import pipeline.model.IncomingMessage;
 
 @Service
 @Transactional
@@ -17,20 +17,20 @@ public class MessageService {
 	@Autowired
 	private MessageRepository messageRepository;
 
-	public Message findMessage(Long id) {
-		Message message = messageRepository.findOne(id);
+	public IncomingMessage findMessage(Long id) {
+		IncomingMessage message = messageRepository.findOne(id);
 		if (message == null) {
 			throw new MessageNotFoundException(id);
 		}
 		return message;
 	}
 
-	public Collection<Message> findMessages() {
+	public Collection<IncomingMessage> findMessages() {
 		return StreamSupport.stream(messageRepository.findAll().spliterator(), false).collect(Collectors.toList());
 	}
 
-	public Message saveMessage(Message message) {
-		Message saved = messageRepository.save(message);
+	public IncomingMessage saveMessage(IncomingMessage message) {
+		IncomingMessage saved = messageRepository.save(message);
 		return saved;
 	}
 }
