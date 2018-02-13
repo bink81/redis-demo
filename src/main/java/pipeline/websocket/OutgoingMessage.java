@@ -1,5 +1,8 @@
 package pipeline.websocket;
 
+/**
+ * This class represents the data that is sent out to registered subscribers.
+ */
 public class OutgoingMessage {
 
 	private String text;

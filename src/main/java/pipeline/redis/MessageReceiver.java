@@ -11,6 +11,10 @@ import pipeline.services.MessageService;
 import pipeline.websocket.OutgoingMessage;
 import pipeline.websocket.WebSocketConfig;
 
+/**
+ * This class receives a message from redis, persists it and sends to
+ * subscribers.
+ */
 @Controller
 public class MessageReceiver {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MessageReceiver.class);

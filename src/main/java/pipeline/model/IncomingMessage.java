@@ -5,6 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * This class represents user provided data.
+ */
 @Entity
 public class IncomingMessage {
 
