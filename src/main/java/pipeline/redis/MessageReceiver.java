@@ -29,7 +29,7 @@ public class MessageReceiver {
 	}
 
 	public void receiveMessage(String message) {
-		LOGGER.info("Received <" + message + ">");
+		LOGGER.debug("Received <{}>", message);
 		IncomingMessage user = new IncomingMessage(message);
 
 		// Send notification(s) only when persistence works

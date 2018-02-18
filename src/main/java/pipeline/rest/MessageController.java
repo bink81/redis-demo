@@ -42,7 +42,7 @@ public class MessageController {
 
 	private void sendMessageToRedis(String text) {
 		StringRedisTemplate template = applicationContext.getBean(StringRedisTemplate.class);
-		LOGGER.info("Sending message: " + text);
+		LOGGER.debug("Sending message: {}", text);
 		template.convertAndSend(Application.TOPIC, text);
 	}
 
