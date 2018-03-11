@@ -12,7 +12,7 @@ import pipeline.websocket.OutgoingMessage;
 import pipeline.websocket.WebSocketConfig;
 
 /**
- * This class receives a message from redis, persists it and sends to
+ * This class receives a message from Redis, persists it and sends to
  * subscribers.
  */
 @Controller
@@ -30,10 +30,10 @@ public class MessageReceiver {
 
 	public void receiveMessage(String message) {
 		LOGGER.debug("Received <{}>", message);
-		IncomingMessage user = new IncomingMessage(message);
+		IncomingMessage incomingMessage = new IncomingMessage(message);
 
 		// Send notification(s) only when persistence works
-		messageService.saveMessage(user);
+		messageService.saveMessage(incomingMessage);
 		template.convertAndSend(WebSocketConfig.DESTINATION, new OutgoingMessage(message));
 	}
 }
